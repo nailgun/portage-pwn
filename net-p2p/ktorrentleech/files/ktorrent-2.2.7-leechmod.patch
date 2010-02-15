@@ -1,0 +1,65 @@
+diff -ur ktorrent-2.2.7/libktorrent/ktversion.h ktorrent-2.2.7-leechmod/libktorrent/ktversion.h
+--- ktorrent-2.2.7/libktorrent/ktversion.h	2008-05-25 21:30:45.000000000 +0400
++++ ktorrent-2.2.7-leechmod/libktorrent/ktversion.h	2008-07-27 05:01:25.000000000 +0400
+@@ -28,7 +28,7 @@
+ 	const bt::Uint32 MAJOR = 2;
+ 	const bt::Uint32 MINOR = 2;
+ 	const char VERSION_STRING[] = "2.2.7";
+-	const char PEER_ID[] = "-KT2270-";
++	const char PEER_ID[] = "-UT1770-";
+ }
+ 
+ #define KT_VERSION_MACRO "2.2.7"
+diff -ur ktorrent-2.2.7/libktorrent/torrent/httptracker.cpp ktorrent-2.2.7-leechmod/libktorrent/torrent/httptracker.cpp
+--- ktorrent-2.2.7/libktorrent/torrent/httptracker.cpp	2008-05-25 21:30:43.000000000 +0400
++++ ktorrent-2.2.7-leechmod/libktorrent/torrent/httptracker.cpp	2008-07-27 04:58:40.000000000 +0400
+@@ -196,27 +196,27 @@
+ 		
+ 		u.addQueryItem("peer_id",peer_id.toString());
+ 		u.addQueryItem("port",QString::number(port));
+-		u.addQueryItem("uploaded",QString::number(s.trk_bytes_uploaded));
+-		u.addQueryItem("downloaded",QString::number(s.trk_bytes_downloaded));
++		u.addQueryItem("uploaded","0");
++		u.addQueryItem("downloaded","0");
+ 		
+-		if (event == "completed")
+-			u.addQueryItem("left","0"); // need to send 0 when we are completed
+-		else
+-			u.addQueryItem("left",QString::number(s.bytes_left));
++		u.addQueryItem("left",QString::number(s.total_bytes));
+ 		
+ 		u.addQueryItem("compact","1");
+-		if (event != "stopped")
+-			u.addQueryItem("numwant","100");
+-		else
+-			u.addQueryItem("numwant","0");
+-		
++				
+ 		u.addQueryItem("key",QString::number(key));
+ 		QString cip = Tracker::getCustomIP();
+ 		if (!cip.isNull())
+ 			u.addQueryItem("ip",cip);
+ 
+-		if (event != QString::null)
+-			u.addQueryItem("event",event);
++		if (event == "completed" || event == "stopped") {
++			u.addQueryItem("numwant","0");
++			u.addQueryItem("event","stopped");
++		} else {
++			u.addQueryItem("numwant","100");
++			if (event != QString::null)
++				u.addQueryItem("event",event);
++		}
++		
+ 		QString epq = u.encodedPathAndQuery();
+ 		const SHA1Hash & info_hash = tor->getInfoHash();
+ 		epq += "&info_hash=" + info_hash.toURLString();
+@@ -417,7 +417,7 @@
+ 	
+ 	void HTTPTracker::setupMetaData(KIO::MetaData & md)
+ 	{
+-		md["UserAgent"] = "ktorrent/" VERSION;
++		md["UserAgent"] = "uTorrent/1770";
+ 		md["SendLanguageSettings"] = "false";
+ 		md["Cookies"] = "none";
+ 	//	md["accept"] = "text/plain";

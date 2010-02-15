@@ -1,0 +1,107 @@
+diff -ur transmission-1.83/cli/cli.c transmission-1.83-leech/cli/cli.c
+--- transmission-1.83/cli/cli.c	2010-01-29 04:02:16.000000000 +0300
++++ transmission-1.83-leech/cli/cli.c	2010-02-15 23:08:46.000000000 +0300
+@@ -86,7 +86,7 @@
+ static const char *
+ getUsage( void )
+ {
+-    return "A fast and easy BitTorrent client\n"
++    return "A fast and easy BitTorrent client. Leechmod.\n"
+            "\n"
+            "Usage: " MY_NAME " [options] <file|url|magnet>";
+ }
+diff -ur transmission-1.83/daemon/daemon.c transmission-1.83-leech/daemon/daemon.c
+--- transmission-1.83/daemon/daemon.c	2010-01-29 04:02:12.000000000 +0300
++++ transmission-1.83-leech/daemon/daemon.c	2010-02-15 23:08:46.000000000 +0300
+@@ -53,7 +53,7 @@
+ {
+     return "Transmission " LONG_VERSION_STRING
+            "  http://www.transmissionbt.com/\n"
+-           "A fast and easy BitTorrent client\n"
++           "A fast and easy BitTorrent client. Leechmod.\n"
+            "\n"
+            MY_NAME " is a headless Transmission session\n"
+            "that can be controlled via transmission-remote or Clutch.\n"
+diff -ur transmission-1.83/gtk/main.c transmission-1.83-leech/gtk/main.c
+--- transmission-1.83/gtk/main.c	2010-01-29 04:01:37.000000000 +0300
++++ transmission-1.83-leech/gtk/main.c	2010-02-15 23:08:46.000000000 +0300
+@@ -1349,7 +1349,7 @@
+     gtk_show_about_dialog( parent,
+                            "name", g_get_application_name( ),
+                            "comments",
+-                           _( "A fast and easy BitTorrent client" ),
++                           _( "A fast and easy BitTorrent client. Leechmod." ),
+                            "version", LONG_VERSION_STRING,
+                            "website", website_url,
+                            "website-label", website_url,
+diff -ur transmission-1.83/libtransmission/announcer.c transmission-1.83-leech/libtransmission/announcer.c
+--- transmission-1.83/libtransmission/announcer.c	2010-01-29 04:01:32.000000000 +0300
++++ transmission-1.83-leech/libtransmission/announcer.c	2010-02-15 23:08:46.000000000 +0300
+@@ -655,13 +655,20 @@
+                    const tr_tier          * tier,
+                    const char             * eventName )
+ {
+-    const int isStopping = !strcmp( eventName, "stopped" );
+-    const int numwant = isStopping ? 0 : NUMWANT;
+     const tr_tracker_item  * tracker = tier->currentTracker;
+     const char * ann = tracker->announce;
+     struct evbuffer * buf = evbuffer_new( );
+     char * ret;
+     const unsigned char * ipv6;
++    int isStopping;
++    int numwant;
++
++	if( !strcmp(eventName, "completed") ) {
++		eventName = "stopped";
++	}
++
++    isStopping = !strcmp( eventName, "stopped" );
++    numwant = isStopping ? 0 : NUMWANT;
+ 
+     evbuffer_add_printf( buf, "%s"
+                               "%c"
+@@ -680,18 +687,12 @@
+                               torrent->info.hashEscaped,
+                               torrent->peer_id,
+                               (int)tr_sessionGetPeerPort( announcer->session ),
+-                              torrent->uploadedCur,
+-                              torrent->downloadedCur,
+-                              tr_cpLeftUntilComplete( &torrent->completion ),
++                              (uint64_t)0,
++                              (uint64_t)0,
++                              torrent->info.totalSize,
+                               numwant,
+                               tracker->key_param );
+ 
+-    if( torrent->corruptCur )
+-        evbuffer_add_printf( buf, "&corrupt=%" PRIu64, torrent->corruptCur );
+-
+-    if( !isStopping )
+-        evbuffer_add_printf( buf, "&upload_only=%d", tr_torrentIsSeed( torrent ) ? 1 : 0 );
+-
+     if( announcer->session->encryptionMode == TR_ENCRYPTION_REQUIRED )
+         evbuffer_add_printf( buf, "&requirecrypto=1" );
+ 
+diff -ur transmission-1.83/qt/about.cc transmission-1.83-leech/qt/about.cc
+--- transmission-1.83/qt/about.cc	2010-01-29 04:01:33.000000000 +0300
++++ transmission-1.83-leech/qt/about.cc	2010-02-15 23:08:46.000000000 +0300
+@@ -50,7 +50,7 @@
+     l->setMargin( 8 );
+     v->addWidget( l );
+ 
+-    l = new QLabel( tr( "A fast and easy BitTorrent client" ) );
++    l = new QLabel( tr( "A fast and easy BitTorrent client. Leechmod." ) );
+     l->setStyleSheet( "text-align: center" );
+     l->setAlignment( Qt::AlignCenter );
+     v->addWidget( l );
+diff -ur transmission-1.83/web/index.html transmission-1.83-leech/web/index.html
+--- transmission-1.83/web/index.html	2010-01-29 04:02:17.000000000 +0300
++++ transmission-1.83-leech/web/index.html	2010-02-15 23:10:18.000000000 +0300
+@@ -391,6 +391,7 @@
+ 								<li id="reverse_sort_order">Reverse Sort Order</li>
+ 							</ul>
+ 						</li>
++						<li>Leechmod</li>
+ 					</ul>
+ 				</li>
+ 			</ul>

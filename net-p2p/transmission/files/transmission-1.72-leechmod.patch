@@ -1,0 +1,39 @@
+diff -ur transmission-1.72/libtransmission/tracker.c transmission-1.72-leech/libtransmission/tracker.c
+--- transmission-1.72/libtransmission/tracker.c	2009-06-17 04:01:44.000000000 +0400
++++ transmission-1.72-leech/libtransmission/tracker.c	2009-11-17 12:49:02.000000000 +0300
+@@ -742,9 +742,17 @@
+                         const char *       eventName,
+                         struct evbuffer *  buf )
+ {
+-    const int    isStopping = !strcmp( eventName, "stopped" );
+-    const int    numwant = isStopping ? 0 : NUMWANT;
+-    const char * ann = getCurrentAddressFromTorrent( t, torrent )->announce;
++    int isStopping;
++    int numwant;
++    const char * ann;
++
++    if( !strcmp(eventName, "completed") ) {
++        eventName = "stopped";
++    }
++
++    isStopping = !strcmp( eventName, "stopped" );
++    numwant = isStopping ? 0 : NUMWANT;
++    ann = getCurrentAddressFromTorrent( t, torrent )->announce;
+ 
+     evbuffer_add_printf( buf, "%cinfo_hash=%s"
+                               "&peer_id=%s"
+@@ -760,10 +768,10 @@
+                               t->escaped,
+                               t->peer_id,
+                               tr_sessionGetPeerPort( t->session ),
+-                              torrent->uploadedCur,
+-                              torrent->downloadedCur,
+-                              torrent->corruptCur,
+-                              tr_cpLeftUntilComplete( &torrent->completion ),
++                              (uint64_t)0,
++                              (uint64_t)0,
++                              (uint64_t)0,
++                              torrent->info.totalSize,
+                               numwant,
+                               t->key_param );
+ 

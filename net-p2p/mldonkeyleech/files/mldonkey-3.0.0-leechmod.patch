@@ -1,0 +1,31 @@
+diff -ur mldonkey-3.0.0/src/networks/bittorrent/bTClients.ml mldonkey-3.0.0-leech/src/networks/bittorrent/bTClients.ml
+--- mldonkey-3.0.0/src/networks/bittorrent/bTClients.ml	2008-07-02 11:49:07.000000000 +0400
++++ mldonkey-3.0.0-leech/src/networks/bittorrent/bTClients.ml	2009-03-03 14:02:21.000000000 +0300
+@@ -102,12 +102,12 @@
+ 
+     | Some swarmer ->
+         let local_downloaded = CommonSwarming.downloaded swarmer in
+-        let left = file_size file -- local_downloaded in
++        let left = file_size file in
+         match event with
+-        | "completed" -> [("event", "completed")],false,local_downloaded,zero
++        | "completed" -> [("event", "stopped")],false,zero, left
+         | "started" -> [("event", "started")],true,zero, left
+         | "stopped" -> [("event", "stopped")],false,zero, left
+-        | _ -> [],true,local_downloaded, left
++        | _ -> [],true,zero, left
+   in
+ 
+   let args = ("no_peer_id", "1") :: ("compact", "1") :: args in
+@@ -124,8 +124,8 @@
+     ("info_hash", Sha1.direct_to_string file.file_id) ::
+     ("peer_id", Sha1.direct_to_string !!client_uid) ::
+     ("port", string_of_int !!client_port) ::
+-    ("uploaded", Int64.to_string file.file_uploaded) ::
+-    ("downloaded", Int64.to_string downloaded) ::
++    ("uploaded", "0") ::
++    ("downloaded", "0") ::
+     ("left", Int64.to_string left) ::
+     args
+   in
+Only in mldonkey-3.0.0-leech/src/networks/bittorrent: .bTTracker.ml.swp
