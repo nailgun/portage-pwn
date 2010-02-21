@@ -12,7 +12,7 @@ IUSE="doc fasttrack gd gnutella gtk guionly magic +ocamlopt"
 
 DESCRIPTION="MLDonkey is a multi-network P2P application written in Ocaml, coming with its own Gtk GUI, web and telnet interface. Leechmod."
 HOMEPAGE="http://mldonkey.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${PN}/mldonkey-${PV}.tar.bz2"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -25,15 +25,12 @@ RDEPEND="dev-lang/perl
 			>=dev-ml/lablgtk-2.6 )
 	gd? ( >=media-libs/gd-2.0.28 )
 	magic? ( sys-apps/file )"
-
 DEPEND="${RDEPEND}
 	>=dev-lang/ocaml-3.08.3
 	sys-apps/sed
 	!net-p2p/mldonkey"
 
 MLUSER="p2p"
-
-S="${WORKDIR}/mldonkey-${PV}"
 
 pkg_setup() {
 	if use gtk; then

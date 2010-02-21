@@ -6,18 +6,21 @@ EAPI="2"
 
 inherit git distutils
 
-EGIT_REPO_URI="git://wae.org.ru/logdog.git"
+EGIT_REPO_URI="git://github.com/nailgun/logdog.git"
 EGIT_BRANCH="stable"
 EGIT_TREE="stable"
 
 DESCRIPTION="System log maintenance tools."
-HOMEPAGE="http://wae.org.ru/"
+HOMEPAGE="http://github.com/nailgun/logdog"
 SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
+
+RDEPEND=">=dev-lang/python-2.6"
+DEPEND="${RDEPEND}"
 
 src_unpack() {
 	git_src_unpack

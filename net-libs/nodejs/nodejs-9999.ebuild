@@ -15,12 +15,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test gnutls"
 
-DEPEND=">=dev-lang/python-2.4
-		${RDEPEND}"
 RDEPEND="gnutls? (
 			net-libs/gnutls
 			dev-libs/libgpg-error
 		)"
+DEPEND=">=dev-lang/python-2.4
+		${RDEPEND}"
 
 src_unpack() {
 	git_src_unpack

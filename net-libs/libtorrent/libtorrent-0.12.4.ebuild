@@ -6,7 +6,7 @@ inherit base eutils toolchain-funcs flag-o-matic libtool
 
 DESCRIPTION="LibTorrent is a BitTorrent library written in C++ for *nix. Leechmod."
 HOMEPAGE="http://libtorrent.rakshasa.no/"
-SRC_URI="http://libtorrent.rakshasa.no/downloads/libtorrent-${PV}.tar.gz"
+SRC_URI="http://libtorrent.rakshasa.no/downloads/${P}.tar.gz"
 SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="amd64 hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
@@ -18,10 +18,8 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	!net-libs/libtorrent"
 
-PATCHES=( "${FILESDIR}/libtorrent-${PV}-gcc44.patch"
-          "${FILESDIR}/libtorrent-${PV}-leechmod.patch" )
-
-S="${WORKDIR}/libtorrent-${PV}"
+PATCHES=( "${FILESDIR}/${P}-gcc44.patch"
+          "${FILESDIR}/${P}-leechmod.patch" )
 
 src_unpack() {
 	base_src_unpack
@@ -51,9 +49,4 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS NEWS README
-}
-
-pkg_postinst() {
-	einfo "You must append net-libs/libtorrent-${PV} to"
-	einfo "/etc/portage/profile/package.provided file."
 }

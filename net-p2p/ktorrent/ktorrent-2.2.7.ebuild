@@ -8,7 +8,7 @@ MY_P="${P/_/}"
 MY_PV="${PV/_/}"
 DESCRIPTION="A BitTorrent program for KDE. Leechmod."
 HOMEPAGE="http://ktorrent.org/"
-SRC_URI="http://ktorrent.org/downloads/2.2.7/ktorrent-2.2.7.tar.bz2"
+SRC_URI="http://ktorrent.org/downloads/${PV}/${P}.tar.bz2"
 LICENSE="GPL-2"
 
 SLOT="0"
@@ -21,8 +21,6 @@ DEPEND="dev-libs/gmp
 	!net-p2p/ktorrent"
 RDEPEND="${DEPEND}
 	|| ( =kde-base/kdebase-kioslaves-3.5* =kde-base/kdebase-3.5* )"
-
-S="${WORKDIR}/ktorrent-2.2.7"
 
 need-kde 3.5
 

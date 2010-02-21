@@ -4,19 +4,19 @@
 
 DESCRIPTION="Evented I/O for v8 javascript."
 HOMEPAGE="http://nodejs.org/"
-SRC_URI="http://nodejs.org/dist/node-v0.1.29.tar.gz"
+SRC_URI="http://nodejs.org/dist/node-v${PV}.tar.gz"
 
 LICENSE="MIT GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test gnutls"
 
-DEPEND=">=dev-lang/python-2.4
-		${RDEPEND}"
 RDEPEND="gnutls? (
 			net-libs/gnutls
 			dev-libs/libgpg-error
 		)"
+DEPEND=">=dev-lang/python-2.4
+		${RDEPEND}"
 
 S="${WORKDIR}/node-v${PV}"
 

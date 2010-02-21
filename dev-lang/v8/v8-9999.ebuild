@@ -15,10 +15,10 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="readline"
 
+RDEPEND="readline? ( sys-libs/readline )"
 DEPEND=">=dev-lang/python-2.4
 		>=dev-util/scons-1.0.0
 		${RDEPEND}"
-RDEPEND=""
 
 src_unpack() {
 	subversion_src_unpack
