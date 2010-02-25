@@ -1,6 +1,6 @@
-diff -ur transmission-1.83/cli/cli.c transmission-1.83-leech/cli/cli.c
+diff -ur transmission-1.83/cli/cli.c transmission-1.83-leechmod/cli/cli.c
 --- transmission-1.83/cli/cli.c	2010-01-29 04:02:16.000000000 +0300
-+++ transmission-1.83-leech/cli/cli.c	2010-02-15 23:08:46.000000000 +0300
++++ transmission-1.83-leechmod/cli/cli.c	2010-02-25 18:06:50.000000000 +0300
 @@ -86,7 +86,7 @@
  static const char *
  getUsage( void )
@@ -10,9 +10,9 @@ diff -ur transmission-1.83/cli/cli.c transmission-1.83-leech/cli/cli.c
             "\n"
             "Usage: " MY_NAME " [options] <file|url|magnet>";
  }
-diff -ur transmission-1.83/daemon/daemon.c transmission-1.83-leech/daemon/daemon.c
+diff -ur transmission-1.83/daemon/daemon.c transmission-1.83-leechmod/daemon/daemon.c
 --- transmission-1.83/daemon/daemon.c	2010-01-29 04:02:12.000000000 +0300
-+++ transmission-1.83-leech/daemon/daemon.c	2010-02-15 23:08:46.000000000 +0300
++++ transmission-1.83-leechmod/daemon/daemon.c	2010-02-25 18:06:50.000000000 +0300
 @@ -53,7 +53,7 @@
  {
      return "Transmission " LONG_VERSION_STRING
@@ -22,9 +22,9 @@ diff -ur transmission-1.83/daemon/daemon.c transmission-1.83-leech/daemon/daemon
             "\n"
             MY_NAME " is a headless Transmission session\n"
             "that can be controlled via transmission-remote or Clutch.\n"
-diff -ur transmission-1.83/gtk/main.c transmission-1.83-leech/gtk/main.c
+diff -ur transmission-1.83/gtk/main.c transmission-1.83-leechmod/gtk/main.c
 --- transmission-1.83/gtk/main.c	2010-01-29 04:01:37.000000000 +0300
-+++ transmission-1.83-leech/gtk/main.c	2010-02-15 23:08:46.000000000 +0300
++++ transmission-1.83-leechmod/gtk/main.c	2010-02-25 18:06:50.000000000 +0300
 @@ -1349,7 +1349,7 @@
      gtk_show_about_dialog( parent,
                             "name", g_get_application_name( ),
@@ -34,9 +34,9 @@ diff -ur transmission-1.83/gtk/main.c transmission-1.83-leech/gtk/main.c
                             "version", LONG_VERSION_STRING,
                             "website", website_url,
                             "website-label", website_url,
-diff -ur transmission-1.83/libtransmission/announcer.c transmission-1.83-leech/libtransmission/announcer.c
+diff -ur transmission-1.83/libtransmission/announcer.c transmission-1.83-leechmod/libtransmission/announcer.c
 --- transmission-1.83/libtransmission/announcer.c	2010-01-29 04:01:32.000000000 +0300
-+++ transmission-1.83-leech/libtransmission/announcer.c	2010-02-15 23:08:46.000000000 +0300
++++ transmission-1.83-leechmod/libtransmission/announcer.c	2010-02-25 18:06:50.000000000 +0300
 @@ -655,13 +655,20 @@
                     const tr_tier          * tier,
                     const char             * eventName )
@@ -82,9 +82,9 @@ diff -ur transmission-1.83/libtransmission/announcer.c transmission-1.83-leech/l
      if( announcer->session->encryptionMode == TR_ENCRYPTION_REQUIRED )
          evbuffer_add_printf( buf, "&requirecrypto=1" );
  
-diff -ur transmission-1.83/qt/about.cc transmission-1.83-leech/qt/about.cc
+diff -ur transmission-1.83/qt/about.cc transmission-1.83-leechmod/qt/about.cc
 --- transmission-1.83/qt/about.cc	2010-01-29 04:01:33.000000000 +0300
-+++ transmission-1.83-leech/qt/about.cc	2010-02-15 23:08:46.000000000 +0300
++++ transmission-1.83-leechmod/qt/about.cc	2010-02-25 18:06:50.000000000 +0300
 @@ -50,7 +50,7 @@
      l->setMargin( 8 );
      v->addWidget( l );
@@ -94,14 +94,36 @@ diff -ur transmission-1.83/qt/about.cc transmission-1.83-leech/qt/about.cc
      l->setStyleSheet( "text-align: center" );
      l->setAlignment( Qt::AlignCenter );
      v->addWidget( l );
-diff -ur transmission-1.83/web/index.html transmission-1.83-leech/web/index.html
+diff -ur transmission-1.83/web/index.html transmission-1.83-leechmod/web/index.html
 --- transmission-1.83/web/index.html	2010-01-29 04:02:17.000000000 +0300
-+++ transmission-1.83-leech/web/index.html	2010-02-15 23:10:18.000000000 +0300
-@@ -391,6 +391,7 @@
- 								<li id="reverse_sort_order">Reverse Sort Order</li>
- 							</ul>
- 						</li>
-+						<li>Leechmod</li>
- 					</ul>
- 				</li>
- 			</ul>
++++ transmission-1.83-leechmod/web/index.html	2010-02-25 18:07:13.000000000 +0300
+@@ -304,7 +304,7 @@
+ 							<div style="clear: both; visibility: hidden;"></div>
+ 						</div>
+ 					</div>
+-					<span id="transmission_version"></span>
++					<span id="transmission_version_leech"><span id="transmission_version"></span> leechmod</span>
+ 					<a href="#save" id="prefs_save_button">Save</a>
+ 					<a href="#cancel" id="prefs_cancel_button">Cancel</a>
+ 				</form>
+diff -ur transmission-1.83/web/stylesheets/common.css transmission-1.83-leechmod/web/stylesheets/common.css
+--- transmission-1.83/web/stylesheets/common.css	2010-01-29 04:02:17.000000000 +0300
++++ transmission-1.83-leechmod/web/stylesheets/common.css	2010-02-25 18:07:21.000000000 +0300
+@@ -1050,13 +1050,16 @@
+ 	background-color: #FFEFEF;
+ }
+ 
+-#transmission_version{
++#transmission_version_leech{
+   position: absolute;
+   bottom: 10px;
+   left:   10px;
+   color:  #999;
+ }
+ 
++#transmission_version{
++}
++
+ /*--------------------------------------
+  *
+  * T R A N S   M E N U
