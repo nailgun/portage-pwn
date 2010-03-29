@@ -2,18 +2,18 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit git
+inherit git bash-completion
 
 EGIT_REPO_URI="git://git.gnome.org/jhbuild"
 
-DESCRIPTION="JHBuild is a tool designed to ease building collections of source packages"
+DESCRIPTION="Jhbuild is a tool used to build the whole GNOME desktop from the git source"
 HOMEPAGE="http://live.gnome.org/Jhbuild"
 SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="bash-completion"
 
 RDEPEND=">=dev-lang/python-2.3
 		 >=dev-libs/glib-2.2.0
@@ -35,4 +35,6 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
 	dodoc AUTHORS ChangeLog HACKING MAINTAINERS NEWS README || die
+	dodoc sample.jhbuildrc || die
+	dobashcompletion contrib/jhbuild_completion.bash ${PN}
 }
