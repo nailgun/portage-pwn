@@ -12,7 +12,7 @@ SRC_URI=""
 
 LICENSE="MIT GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="test gnutls"
 
 RDEPEND="gnutls? (
@@ -34,5 +34,5 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
-	dodoc AUTHORS ChangeLog README LICENSE || die
+	dodoc AUTHORS ChangeLog README || die
 }
