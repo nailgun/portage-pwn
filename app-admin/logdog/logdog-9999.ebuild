@@ -16,7 +16,7 @@ SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="test"
 
 RDEPEND=">=dev-lang/python-2.6"
