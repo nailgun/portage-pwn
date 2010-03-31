@@ -81,7 +81,9 @@ src_prepare() {
 	epatch "${FILESDIR}"/${P}-place-plugin.patch
 	epatch "${FILESDIR}"/${P}-window-region-calculation.patch
 
-	epatch "${FILESDIR}"/${P}-fix-focus.patch
+	epatch "${FILESDIR}/${P}-fix-focus.patch"
+	epatch "${FILESDIR}/${P}-libpng14.patch"
+	epatch "${FILESDIR}/${P}-kde44.patch"
 
 	if ! use gnome; then
 		epatch "${FILESDIR}"/${PN}-no-gconf.patch
