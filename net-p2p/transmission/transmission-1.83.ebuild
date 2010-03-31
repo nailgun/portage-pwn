@@ -11,14 +11,13 @@ SRC_URI="http://download.transmissionbt.com/${PN}/files/${P}.tar.bz2"
 
 LICENSE="MIT GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~ppc x86 ~x86-fbsd"
+KEYWORDS="amd64 ~arm ppc x86 ~x86-fbsd"
 IUSE="gnome gtk libnotify sound qt4"
 
 RDEPEND=">=dev-libs/libevent-1.4.11
 	<dev-libs/libevent-2
 	>=dev-libs/openssl-0.9.4
-	|| ( >=net-misc/curl-7.16.3[openssl]
-		>=net-misc/curl-7.16.3[ssl]
+	|| ( >=net-misc/curl-7.16.3[ssl]
 		>=net-misc/curl-7.16.3[gnutls] )
 	gtk? ( >=dev-libs/glib-2.15.5:2
 		>=x11-libs/gtk+-2.12:2
@@ -34,14 +33,9 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	sys-apps/sed"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
-	epatch "${FILESDIR}/${PN}-1.83-leechmod.patch"
-}
-
 src_prepare() {
+	epatch "${FILESDIR}/${PN}-1.83-leechmod.patch"
+
 	sed -i \
 		-e 's:-g -O0::g' \
 		-e 's:-g -O3::g' \
