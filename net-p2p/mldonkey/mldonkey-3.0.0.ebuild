@@ -2,33 +2,32 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
 WANT_AUTOCONF=2.5
 
 inherit flag-o-matic eutils autotools toolchain-funcs
 
-EAPI="1"
-
 IUSE="doc fasttrack gd gnutella gtk guionly magic +ocamlopt"
 
-DESCRIPTION="MLDonkey is a multi-network P2P application written in Ocaml, coming with its own Gtk GUI, web and telnet interface. Leechmod."
+DESCRIPTION="MLDonkey is a multi-network P2P application written in Ocaml. Leechmod."
 HOMEPAGE="http://mldonkey.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 hppa ~ia64 ~ppc ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 hppa ~ia64 ppc ~sparc x86 ~x86-fbsd"
 
 RDEPEND="dev-lang/perl
 	guionly? ( >=gnome-base/librsvg-2.4.0
 			>=dev-ml/lablgtk-2.6 )
 	gtk? ( >=gnome-base/librsvg-2.4.0
-			>=dev-ml/lablgtk-2.6 )
-	gd? ( >=media-libs/gd-2.0.28 )
+			>=dev-ml/lablgtk-2.6[svg] )
+	gd? ( >=media-libs/gd-2.0.28[truetype] )
 	magic? ( sys-apps/file )"
+
 DEPEND="${RDEPEND}
-	>=dev-lang/ocaml-3.08.3
-	sys-apps/sed
-	!net-p2p/mldonkey"
+	>=dev-lang/ocaml-3.10.2[ocamlopt?]
+	sys-apps/sed"
 
 MLUSER="p2p"
 
@@ -44,22 +43,6 @@ pkg_setup() {
 		echo ""
 	fi
 
-	if use gtk && ! built_with_use dev-ml/lablgtk svg; then
-		eerror "dev-ml/lablgtk must be built with the 'svg' USE flag to use the gtk gui"
-		die "Recompile dev-ml/lablgtk with enabled svg USE flag"
-	fi
-
-	if use gd && ! built_with_use media-libs/gd truetype; then
-		eerror "media-libs/gd must be built with 'truetype' to compile"
-		eerror "MLDonkey with gd support"
-		die "Recompile media-libs/gd with enabled truetype USE flag"
-	fi
-	if use ocamlopt && ! built_with_use --missing true dev-lang/ocaml ocamlopt; then
-		eerror "In order to build ${PN} with native code support from ocaml"
-		eerror "You first need to have a native code ocaml compiler."
-		eerror "You need to install dev-lang/ocaml with ocamlopt useflag on."
-		die "Please install ocaml with ocamlopt useflag"
-	fi
 	# dev-lang/ocaml creates its own objects but calls gcc for linking, which will
 	# results in relocations if gcc wants to create a PIE executable
 	if gcc-specs-pie ; then
@@ -68,20 +51,18 @@ pkg_setup() {
 		ewarn "We have appended -nopie to ocaml build options"
 		ewarn "because linking an executable with pie while the objects are not pic will not work"
 	fi
+
+	epatch "${FILESDIR}/mldonkey-3.0.0-leechmod.patch"
 }
 
-src_unpack() {
-	unpack ${A} && cd "${S}"
-
+src_prepare() {
 	cd "${S}"/config
 	eautoconf
 	cd "${S}"
 	use ocamlopt || sed -i -e "s/ocamlopt/idontwantocamlopt/g" "${S}/config/configure" || die "failed to disable ocamlopt"
-	# Apply leechmod
-	epatch "${FILESDIR}/mldonkey-3.0.0-leechmod.patch"
 }
 
-src_compile() {
+src_configure() {
 	# the dirs are not (yet) used, but it doesn't hurt to specify them anyway
 
 	# onlygui	Disable all nets support, build only chosen GUI
@@ -110,7 +91,9 @@ src_compile() {
 		$(use_enable magic) \
 		--enable-ocamlver=3.10 \
 		${myconf} || die "econf failed"
+}
 
+src_compile() {
 	export OCAMLRUNPARAM="l=256M"
 	emake || die "emake failed"
 
