@@ -12,7 +12,7 @@ ESVN_REPO_URI="http://v8.googlecode.com/svn/trunk/"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS=""
 IUSE="readline"
 
 RDEPEND="readline? ( sys-libs/readline )"
