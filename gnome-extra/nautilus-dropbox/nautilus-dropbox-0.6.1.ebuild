@@ -13,7 +13,10 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
 
-DEPEND="gnome-base/nautilus x11-libs/libnotify"
+DEPEND=">=x11-libs/gtk+-2.12
+		>=dev-libs/glib-2.14
+		>=gnome-base/nautilus-2.16
+		>=x11-libs/libnotify-0.4.4"
 RDEPEND="${DEPEND}"
 
 src_configure() {
